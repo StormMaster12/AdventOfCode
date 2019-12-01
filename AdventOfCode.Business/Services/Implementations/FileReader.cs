@@ -1,0 +1,62 @@
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using AdventOfCode.Business.Services.Interfaces;
+using Microsoft.Extensions.FileProviders;
+
+namespace AdventOfCode.Business.Services.Implementations
+{
+    public class FileReader : IFileReader
+    {
+        private readonly IFileProvider _fileProvider;
+
+        public FileReader(IFileProvider fileProvider)
+        {
+            _fileProvider = fileProvider;
+        }
+
+        public IEnumerable<double> ReadFileToIntArray(string input)
+        {
+            string fileResult = "";
+
+            var fileInfo = _fileProvider.GetFileInfo(input);
+
+            using (var stream = fileInfo.CreateReadStream())
+            {
+                using (var reader = new StreamReader(stream))
+                {
+                    fileResult = reader.ReadToEnd();
+                }
+            }
+
+            return ConvertStringToIntArray(fileResult);
+        }
+
+        public IEnumerable<int> ReadFileByLineToNumberList(string input)
+        {
+            var fileInfo = _fileProvider.GetFileInfo(input);
+            var numberList = new List<int>();
+
+            using (var stream = fileInfo.CreateReadStream())
+            {
+                using (var reader = new StreamReader(stream))
+                {
+                    while (!reader.EndOfStream)
+                    {
+                        var fileIne = reader.ReadLine();
+                        numberList.Add(int.Parse(fileIne));
+                    }
+                }
+            }
+
+            return numberList;
+        }
+
+        private IEnumerable<double> ConvertStringToIntArray(string stringNumbers)
+        {
+            var fileResultChar = stringNumbers.ToCharArray();
+
+            return fileResultChar.Select(char.GetNumericValue);
+        }
+    }
+}
