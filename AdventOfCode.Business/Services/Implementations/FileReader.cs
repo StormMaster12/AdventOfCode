@@ -52,6 +52,23 @@ namespace AdventOfCode.Business.Services.Implementations
             return numberList;
         }
 
+        public IEnumerable<int> ReadFileToNumberListBySeperator(string input, string seperator)
+        {
+            var fileInfo = _fileProvider.GetFileInfo(input);
+            var numberList = new List<int>();
+
+            using (var stream = fileInfo.CreateReadStream())
+            {
+                using (var reader = new StreamReader(stream))
+                {
+                    var fileOutPut = reader.ReadToEnd();
+                    numberList = fileOutPut.Split(seperator).Select(int.Parse).ToList();
+                }
+            }
+
+            return numberList;
+        }
+
         private IEnumerable<double> ConvertStringToIntArray(string stringNumbers)
         {
             var fileResultChar = stringNumbers.ToCharArray();

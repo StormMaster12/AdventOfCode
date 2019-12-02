@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace AdventOfCode.Business.Test
     {
         [DataTestMethod]
         [DataRow("123456", new[] { 1d, 2d, 3d, 4d, 5d, 6d }, DisplayName = "Consecutive Numbers")]
-        [DataRow("112255", new[] { 1d, 1d, 2d, 2d, 5d, 5d},DisplayName = "Duplicate Numbers")]
+        [DataRow("112255", new[] { 1d, 1d, 2d, 2d, 5d, 5d }, DisplayName = "Duplicate Numbers")]
         [DataRow("1759", new[] { 1d, 7d, 5d, 9d }, DisplayName = "Non Consecutive Numbers")]
         [DataRow("17Az", new[] { 1d, 7d, -1d, -1d }, DisplayName = "Non Numeric Values")]
         public void StringOfNumbersConvertsToListOfNumbers(string input, double[] expectedResult)
@@ -46,6 +47,26 @@ namespace AdventOfCode.Business.Test
             fileInfoMock.Setup(x => x.CreateReadStream()).Returns(new MemoryStream(Encoding.UTF8.GetBytes(input)));
 
             int[] result = new FileReader(fileProviderMock.Object).ReadFileByLineToNumberList(filePath).ToArray();
+
+            Assert.IsTrue(expectedResult.SequenceEqual(result));
+        }
+
+        [TestMethod]
+        public void DelimitedListOfNumbersConvertsToListOfNumbers()
+        {
+            int[] expectedResult = new[] { 1, 2, 3, 4 };
+
+            var input = "1,2,3,4";
+            var delimiter = ",";
+            var filePath = "testFile.txt";
+
+            var fileProviderMock = new Mock<IFileProvider>();
+            var fileInfoMock = new Mock<IFileInfo>();
+
+            fileProviderMock.Setup(x => x.GetFileInfo(filePath)).Returns(fileInfoMock.Object);
+            fileInfoMock.Setup(x => x.CreateReadStream()).Returns(new MemoryStream(Encoding.UTF8.GetBytes(input)));
+
+            var result = new FileReader(fileProviderMock.Object).ReadFileToNumberListBySeperator(filePath, delimiter);
 
             Assert.IsTrue(expectedResult.SequenceEqual(result));
         }
