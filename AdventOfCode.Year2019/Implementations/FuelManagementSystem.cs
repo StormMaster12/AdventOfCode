@@ -40,7 +40,8 @@ namespace AdventOfCode.Year2019.Implementations
                 var wirePos = new Vector2();
                 foreach (var wireVector in wire)
                 {
-                    wirePos = Vector2.Add(wirePos, wireVector);
+                    wirePos.X += wireVector.X;
+                    wirePos.Y += wireVector.Y;
 
                     var matchingPoints = vectorPoints.Where(x => x.Equals(wirePos) && x.X != 0 && x.Y != 0);
 
