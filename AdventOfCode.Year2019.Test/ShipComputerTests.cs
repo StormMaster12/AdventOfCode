@@ -18,5 +18,18 @@ namespace AdventOfCode.Year2019.Test
 
             Assert.IsTrue(expectedResult.SequenceEqual(result));
         }
+
+        [TestMethod]
+        public void IntCode_GetExplicitValue()
+        {
+            var expectedResult = new int[] { 3, 2, 1, 0, 99 };
+
+            var valueToGet = 3;
+            var input = new[] { 1, 0, 0, 0, 99 };
+
+            int[] result = new ShipComputer().ComputeIntCodeSpecificValue(input, valueToGet);
+
+            Assert.IsTrue(expectedResult.SequenceEqual(result));
+        }
     }
 }

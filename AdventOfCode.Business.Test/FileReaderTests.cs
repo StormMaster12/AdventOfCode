@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using AdventOfCode.Business.Services.Implementations;
 using Microsoft.Extensions.FileProviders;
@@ -69,6 +71,36 @@ namespace AdventOfCode.Business.Test
             var result = new FileReader(fileProviderMock.Object).ReadFileToNumberListBySeperator(filePath, delimiter);
 
             Assert.IsTrue(expectedResult.SequenceEqual(result));
+        }
+
+        [TestMethod]
+        public void ConvertIndivualLinesToListOfVectors()
+        {
+            List<List<Vector2>> expectedResult = new List<List<Vector2>>() { new List<Vector2>() { new Vector2(-1, 0), new Vector2(0, 2), new Vector2(0, -3), new Vector2(4, 0) } };
+            var input = "R1,U2,D3,L4";
+            var filePath = "testFile.txt";
+            var delimiter = ",";
+
+            var fileProviderMock = new Mock<IFileProvider>();
+            var fileInfoMock = new Mock<IFileInfo>();
+
+            fileProviderMock.Setup(x => x.GetFileInfo(filePath)).Returns(fileInfoMock.Object);
+            fileInfoMock.Setup(x => x.CreateReadStream()).Returns(new MemoryStream(Encoding.UTF8.GetBytes(input)));
+
+
+            var result = new FileReader(fileProviderMock.Object).ReadFileToVectorLists(filePath, delimiter).ToList();
+            
+            Assert.AreEqual(expectedResult[0][0].X, result[0].ElementAt(0).X);
+            Assert.AreEqual(expectedResult[0][0].Y, result[0].ElementAt(0).Y);
+
+            Assert.AreEqual(expectedResult[0][1].X, result[0].ElementAt(1).X);
+            Assert.AreEqual(expectedResult[0][1].Y, result[0].ElementAt(1).Y);
+
+            Assert.AreEqual(expectedResult[0][2].X, result[0].ElementAt(2).X);
+            Assert.AreEqual(expectedResult[0][2].Y, result[0].ElementAt(2).Y);
+
+            Assert.AreEqual(expectedResult[0][3].X, result[0].ElementAt(3).X);
+            Assert.AreEqual(expectedResult[0][3].Y, result[0].ElementAt(3).Y);
         }
     }
 }

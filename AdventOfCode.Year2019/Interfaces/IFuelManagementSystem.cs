@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Numerics;
 
 namespace AdventOfCode.Year2019.Interfaces
 {
-    public interface IFuelCounterUpper
+    public interface IFuelManagementSystem
     {
-        double GetRequiredFuel(in double input);
         double GetRequiredFuleForMultipleModules(IEnumerable<int> modules);
-        double GetRequiredFuleForModulesAndFuel(double input);
         double GetRequiredFuleForAllModulesAndFuel(IEnumerable<int> modules);
+
+        double GetFrontPanelWiresClosestCrossingPoint(IEnumerable<IEnumerable<Vector2>> wires);
     }
 }

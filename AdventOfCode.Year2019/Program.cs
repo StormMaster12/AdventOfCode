@@ -19,21 +19,25 @@ namespace AdventOfCode.Year2019
             var serviceProvider = new ServiceCollection()
                 .AddSingleton(provider)
                 .AddTransient<IFileReader, FileReader>()
-                .AddTransient<IFuelCounterUpper, FuelCounterUpper>()
+                .AddTransient<IFuelManagementSystem, FuelManagementSystem>()
                 .AddTransient<IShipComputer, ShipComputer>()
                 .BuildServiceProvider();
 
             var fileReader = serviceProvider.GetService<IFileReader>();
-            var fuelCounterUpper = serviceProvider.GetService<IFuelCounterUpper>();
+            var fuelCounterUpper = serviceProvider.GetService<IFuelManagementSystem>();
             var shipComputer = serviceProvider.GetService<IShipComputer>();
 
-            var day1FileResult = fileReader.ReadFileByLineToNumberList("Day_1.txt");
-            var day2FileResult = fileReader.ReadFileToNumberListBySeperator("Day_2.txt", ",");
+            var day1FileResult = fileReader.ReadFileByLineToNumberList("PuzzleInputs/Day_1.txt");
+            var day2FileResult = fileReader.ReadFileToNumberListBySeperator("PuzzleInputs/Day_2.txt", ",");
+            var day3FileResult = fileReader.ReadFileToVectorLists("PuzzleInputs/Day_3.txt", ",");
 
             var moduleFuelCount = fuelCounterUpper.GetRequiredFuleForMultipleModules(day1FileResult);
             var moduleFuelCountWithFuel = fuelCounterUpper.GetRequiredFuleForAllModulesAndFuel(day1FileResult);
 
             var gravityAssistResult = shipComputer.ComputeIntCode(day2FileResult.ToArray());
+            var verbAndNounResult = shipComputer.ComputeIntCodeSpecificValue(day2FileResult.ToArray(), 19690720);
+
+            var closestCrossing = fuelCounterUpper.GetFrontPanelWiresClosestCrossingPoint(day3FileResult);
 
             Console.WriteLine("Day 1");
             Console.WriteLine($"Fuel Counter Upper: {moduleFuelCount}");
@@ -41,6 +45,10 @@ namespace AdventOfCode.Year2019
             Console.WriteLine("-----------------------------");
             Console.WriteLine("Day 2");
             Console.WriteLine($"Gravity Assist Result: {gravityAssistResult[0]}");
+            Console.WriteLine($"Verb: {verbAndNounResult[1]}, Noun: {verbAndNounResult[2]}");
+            Console.WriteLine("-----------------------------");
+            Console.WriteLine("Day 3");
+            Console.WriteLine($"Closest Crossing Point: {closestCrossing}");
             Console.ReadLine();
         }
     }

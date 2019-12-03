@@ -42,5 +42,33 @@ namespace AdventOfCode.Year2019.Implementations
 
             return data;
         }
+
+        public int[] ComputeIntCodeSpecificValue(int[] input, in int valueToGet)
+        {
+            int[] inMemory = new int[input.Length];
+            input.CopyTo(inMemory, 0);
+
+            var endNumber = input.Length - 1 > 99 ? 99 : input.Length - 1;
+
+            for (int i = 0; i <= endNumber; i++)
+            {
+                for (int j = 0; j <= endNumber; j++)
+                {
+                    inMemory[1] = j;
+                    inMemory[2] = i;
+
+                    if (ComputeIntCode(inMemory)[0] != valueToGet)
+                    {
+                        input.CopyTo(inMemory, 0);
+                    }
+                    else
+                    {
+                        return inMemory;
+                    }
+                }
+            }
+
+            return inMemory;
+        }
     }
 }

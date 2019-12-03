@@ -3,5 +3,6 @@
     public interface IShipComputer
     {
         int[] ComputeIntCode(int[] data);
+        int[] ComputeIntCodeSpecificValue(int[] input, in int valueToGet);
     }
 }
