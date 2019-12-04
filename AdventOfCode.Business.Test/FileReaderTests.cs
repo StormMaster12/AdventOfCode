@@ -76,7 +76,7 @@ namespace AdventOfCode.Business.Test
         [TestMethod]
         public void ConvertIndivualLinesToListOfVectors()
         {
-            List<List<Vector2>> expectedResult = new List<List<Vector2>>() { new List<Vector2>() { new Vector2(-1, 0), new Vector2(0, 2), new Vector2(0, -3), new Vector2(4, 0) } };
+            List<List<string>> expectedResult = new List<List<string>>() { new List<string>() { "R1", "U2", "D3", "L4" } };
             var input = "R1,U2,D3,L4";
             var filePath = "testFile.txt";
             var delimiter = ",";
@@ -90,17 +90,10 @@ namespace AdventOfCode.Business.Test
 
             var result = new FileReader(fileProviderMock.Object).ReadFileToVectorLists(filePath, delimiter).ToList();
             
-            Assert.AreEqual(expectedResult[0][0].X, result[0].ElementAt(0).X);
-            Assert.AreEqual(expectedResult[0][0].Y, result[0].ElementAt(0).Y);
-
-            Assert.AreEqual(expectedResult[0][1].X, result[0].ElementAt(1).X);
-            Assert.AreEqual(expectedResult[0][1].Y, result[0].ElementAt(1).Y);
-
-            Assert.AreEqual(expectedResult[0][2].X, result[0].ElementAt(2).X);
-            Assert.AreEqual(expectedResult[0][2].Y, result[0].ElementAt(2).Y);
-
-            Assert.AreEqual(expectedResult[0][3].X, result[0].ElementAt(3).X);
-            Assert.AreEqual(expectedResult[0][3].Y, result[0].ElementAt(3).Y);
+            Assert.AreEqual(expectedResult[0][0], result[0].ElementAt(0));
+            Assert.AreEqual(expectedResult[0][1], result[0].ElementAt(1));
+            Assert.AreEqual(expectedResult[0][2], result[0].ElementAt(2));
+            Assert.AreEqual(expectedResult[0][3], result[0].ElementAt(3));
         }
     }
 }

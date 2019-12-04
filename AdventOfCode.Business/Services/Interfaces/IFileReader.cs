@@ -8,6 +8,6 @@ namespace AdventOfCode.Business.Services.Interfaces
         IEnumerable<double> ReadFileToIntArray(string input);
         IEnumerable<int> ReadFileByLineToNumberList(string input);
         IEnumerable<int> ReadFileToNumberListBySeperator(string input, string separator);
-        IEnumerable<IEnumerable<Vector2>> ReadFileToVectorLists(string input, string separator);
+        IEnumerable<IEnumerable<string>> ReadFileToVectorLists(string input, string separator);
     }
 }

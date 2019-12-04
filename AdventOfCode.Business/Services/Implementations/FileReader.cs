@@ -81,10 +81,10 @@ namespace AdventOfCode.Business.Services.Implementations
             return fileResultChar.Select(char.GetNumericValue);
         }
 
-        public IEnumerable<IEnumerable<Vector2>> ReadFileToVectorLists(string input, string separator)
+        public IEnumerable<IEnumerable<string>> ReadFileToVectorLists(string input, string separator)
         {
             var fileInfo = _fileProvider.GetFileInfo(input);
-            var listOfVectorLists = new List<IEnumerable<Vector2>>();
+            var listOfVectorLists = new List<IEnumerable<string>>();
 
             using (var stream = fileInfo.CreateReadStream())
             {
@@ -94,44 +94,12 @@ namespace AdventOfCode.Business.Services.Implementations
                     while (!reader.EndOfStream)
                     {
                         var fileOutPut = reader.ReadLine();
-                        listOfVectorLists.Add(CreateVectorList(fileOutPut, separator));
+                        listOfVectorLists.Add(fileOutPut.Split(separator));
                     }
                 }
             }
 
             return listOfVectorLists;
-        }
-
-        private IEnumerable<Vector2> CreateVectorList(string input, string separator)
-        {
-            var regex = new Regex(@"([a-zA-Z]+)(\d+)");
-            var vectorList = new List<Vector2>();
-            var numberList = input.Split(separator);
-
-            foreach (var s in numberList)
-            {
-                var result = regex.Match(s);
-
-                var alphaPart = result.Groups[1].Value;
-                var numberPart = int.Parse(result.Groups[2].Value);
-                vectorList.Add(CreateVector(alphaPart, numberPart));
-            }
-
-            return vectorList;
-        }
-
-        private Vector2 CreateVector(string direction, int value)
-        {
-            var directionEnum = direction.GetValueFromDescription<VectorDirectionEnum>();
-
-            return directionEnum switch
-            {
-                VectorDirectionEnum.Right => new Vector2(value *-1, 0),
-                VectorDirectionEnum.Up => new Vector2(0, value),
-                VectorDirectionEnum.Left => new Vector2(value, 0),
-                VectorDirectionEnum.Down => new Vector2(0 , value * -1),
-                _ => throw new ArgumentOutOfRangeException()
-            };
         }
     }
 }

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Text.RegularExpressions;
+using AdventOfCode.Business.Enums;
+using AdventOfCode.Business.Extensions;
 using AdventOfCode.Year2019.Interfaces;
 
 namespace AdventOfCode.Year2019.Implementations
@@ -31,42 +34,49 @@ namespace AdventOfCode.Year2019.Implementations
             return modules.Sum(x => GetRequiredFuleForModulesAndFuel(x));
         }
 
-        public double GetFrontPanelWiresClosestCrossingPoint(IEnumerable<IEnumerable<Vector2>> wires)
+        public double GetFrontPanelWiresClosestCrossingPoint(IEnumerable<string> wire1, IEnumerable<string> wire2)
         {
-            var vectorPoints = new List<Vector2>();
+            var path1 = CreatePath(wire1);
+            var path2 = CreatePath(wire2);
 
-            foreach (var wire in wires)
+            var intersections = path1.Keys.Intersect(path2.Keys);
+
+            return intersections.Min(x => Math.Abs(x.x) + Math.Abs(x.y));
+        }
+
+
+        private Dictionary<(int x, int y), int> CreatePath(IEnumerable<string> input)
+        {
+            var regex = new Regex(@"([a-zA-Z]+)(\d+)");
+            var path = new Dictionary<(int x, int y), int>();
+            var pathCount = 0;
+            int x = 0, y = 0;
+
+            foreach (var s in input)
             {
-                var wirePos = new Vector2();
-                foreach (var wireVector in wire)
+                var result = regex.Match(s);
+
+                var alphaPart = result.Groups[1].Value;
+                var numberPart = int.Parse(result.Groups[2].Value);
+
+                for (int i = 0; i < numberPart; i++)
                 {
-                    wirePos.X += wireVector.X;
-                    wirePos.Y += wireVector.Y;
+                    var directionEnum = alphaPart.GetValueFromDescription<VectorDirectionEnum>();
 
-                    var matchingPoints = vectorPoints.Where(x => x.Equals(wirePos) && x.X != 0 && x.Y != 0);
-
-                    if (matchingPoints != null && matchingPoints.Any())
+                    var v = directionEnum switch
                     {
-                        var closestPoint = matchingPoints.Aggregate((curMin, x) =>
-                            curMin.X < x.X && curMin.Y < x.Y ? x : curMin);
+                        VectorDirectionEnum.Right => (++x, y),
+                        VectorDirectionEnum.Left => (--x, y),
+                        VectorDirectionEnum.Down => (x, --y),
+                        VectorDirectionEnum.Up => (x, ++y),
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
 
-                        if (closestPoint != null)
-                        {
-                            return 100;
-                        }
-                    }
-                    else
-                    {
-                        vectorPoints.Add(wirePos);
-                    }
+                    path.TryAdd(v, ++pathCount);
                 }
             }
 
-            Console.WriteLine(string.Join(',',vectorPoints.Take(301).ToList()));
-            Console.WriteLine("--------------");
-            Console.WriteLine(string.Join(',', vectorPoints.TakeLast(301).ToList()));
-            Console.ReadLine();
-            return 0;
+            return path;
         }
     }
 }
