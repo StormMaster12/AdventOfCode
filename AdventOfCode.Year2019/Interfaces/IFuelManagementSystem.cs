@@ -9,5 +9,6 @@ namespace AdventOfCode.Year2019.Interfaces
         double GetRequiredFuleForAllModulesAndFuel(IEnumerable<int> modules);
 
         double GetFrontPanelWiresClosestCrossingPoint(IEnumerable<string> wire1, IEnumerable<string> wire2);
+        double GetFrontPanelWiresShortestPathCrossingPoint(IEnumerable<string> wire1, IEnumerable<string> wire2);
     }
 }

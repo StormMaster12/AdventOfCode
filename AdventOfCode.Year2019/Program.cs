@@ -21,11 +21,14 @@ namespace AdventOfCode.Year2019
                 .AddTransient<IFileReader, FileReader>()
                 .AddTransient<IFuelManagementSystem, FuelManagementSystem>()
                 .AddTransient<IShipComputer, ShipComputer>()
+                .AddTransient<IPasswordValidator, PasswordValidator>()
+                .AddTransient<IPasswordGenerator, PasswordGenerator>()
                 .BuildServiceProvider();
 
             var fileReader = serviceProvider.GetService<IFileReader>();
             var fuelCounterUpper = serviceProvider.GetService<IFuelManagementSystem>();
             var shipComputer = serviceProvider.GetService<IShipComputer>();
+            var passwordGenerator = serviceProvider.GetService<IPasswordGenerator>();
 
             var day1FileResult = fileReader.ReadFileByLineToNumberList("PuzzleInputs/Day_1.txt");
             var day2FileResult = fileReader.ReadFileToNumberListBySeperator("PuzzleInputs/Day_2.txt", ",");
@@ -38,6 +41,10 @@ namespace AdventOfCode.Year2019
             var verbAndNounResult = shipComputer.ComputeIntCodeSpecificValue(day2FileResult.ToArray(), 19690720);
 
             var closestCrossing = fuelCounterUpper.GetFrontPanelWiresClosestCrossingPoint(day3FileResult.ElementAt(0), day3FileResult.ElementAt(1));
+            var shortestWire = fuelCounterUpper.GetFrontPanelWiresShortestPathCrossingPoint(day3FileResult.ElementAt(0),day3FileResult.ElementAt(1));
+
+            var numberOfValidPasswords = passwordGenerator.FindValidPasswords(165432, 707912);
+            var numberOfValidPasswordsNoLargeGroupsOfNumbers = passwordGenerator.FindValidPasswordsNoLargeGroupsOfNumbers(165432, 707912);
 
             Console.WriteLine("Day 1");
             Console.WriteLine($"Fuel Counter Upper: {moduleFuelCount}");
@@ -49,6 +56,11 @@ namespace AdventOfCode.Year2019
             Console.WriteLine("-----------------------------");
             Console.WriteLine("Day 3");
             Console.WriteLine($"Closest Crossing Point: {closestCrossing}");
+            Console.WriteLine($"Shortest Wire: {shortestWire}");
+            Console.WriteLine("-----------------------------");
+            Console.WriteLine("Day 4");
+            Console.WriteLine($"Number of Valid Passwords: {numberOfValidPasswords}");
+            Console.WriteLine($"Number of Valid Passwords No Large Groups of Numbers: {numberOfValidPasswordsNoLargeGroupsOfNumbers}");
             Console.ReadLine();
         }
     }

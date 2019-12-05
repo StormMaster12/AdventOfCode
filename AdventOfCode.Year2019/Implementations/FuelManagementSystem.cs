@@ -44,6 +44,15 @@ namespace AdventOfCode.Year2019.Implementations
             return intersections.Min(x => Math.Abs(x.x) + Math.Abs(x.y));
         }
 
+        public double GetFrontPanelWiresShortestPathCrossingPoint(IEnumerable<string> wire1, IEnumerable<string> wire2)
+        {
+            var path1 = CreatePath(wire1);
+            var path2 = CreatePath(wire2);
+
+            var intersections = path1.Keys.Intersect(path2.Keys);
+
+            return intersections.Min(x => path1[x] + path2[x]);
+        }
 
         private Dictionary<(int x, int y), int> CreatePath(IEnumerable<string> input)
         {
