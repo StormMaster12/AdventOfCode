@@ -12,6 +12,8 @@ namespace AdventOfCode.Year2019.Test
         [DataRow(new[] { 1, 0, 0, 0, 99 }, new[] { 2, 0, 0, 0, 99 })]
         [DataRow(new[] { 2, 3, 0, 3, 99 }, new[] { 2, 3, 0, 6, 99 })]
         [DataRow(new[] { 1, 1, 1, 4, 99, 5, 6, 0, 99 }, new[] { 30, 1, 1, 4, 2, 5, 6, 0, 99 })]
+        [DataRow(new[] { 1002, 4, 3, 4, 33 }, new[] { 1002, 4, 3, 4, 99 }, DisplayName = "Int Code with Modes")]
+        [DataRow(new[] { 1101, 100, -1, 4, 0 }, new[] { 1101, 100, -1, 4, 99 }, DisplayName = "Int Code with Modes and Negative Number")]
         public void IntCodeCalculations(int[] data, int[] expectedResult)
         {
             var result = new ShipComputer().ComputeIntCode(data);

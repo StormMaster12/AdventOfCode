@@ -33,6 +33,7 @@ namespace AdventOfCode.Year2019
             var day1FileResult = fileReader.ReadFileByLineToNumberList("PuzzleInputs/Day_1.txt");
             var day2FileResult = fileReader.ReadFileToNumberListBySeperator("PuzzleInputs/Day_2.txt", ",");
             var day3FileResult = fileReader.ReadFileToVectorLists("PuzzleInputs/Day_3.txt", ",");
+            var day5FileResult = fileReader.ReadFileToNumberListBySeperator("PuzzleInputs/Day_5.txt", ",");
 
             var moduleFuelCount = fuelCounterUpper.GetRequiredFuleForMultipleModules(day1FileResult);
             var moduleFuelCountWithFuel = fuelCounterUpper.GetRequiredFuleForAllModulesAndFuel(day1FileResult);
@@ -45,6 +46,8 @@ namespace AdventOfCode.Year2019
 
             var numberOfValidPasswords = passwordGenerator.FindValidPasswords(165432, 707912);
             var numberOfValidPasswordsNoLargeGroupsOfNumbers = passwordGenerator.FindValidPasswordsNoLargeGroupsOfNumbers(165432, 707912);
+
+            var diagnosticProgram = shipComputer.ComputeIntCode(day5FileResult.ToArray());
 
             Console.WriteLine("Day 1");
             Console.WriteLine($"Fuel Counter Upper: {moduleFuelCount}");
@@ -61,6 +64,9 @@ namespace AdventOfCode.Year2019
             Console.WriteLine("Day 4");
             Console.WriteLine($"Number of Valid Passwords: {numberOfValidPasswords}");
             Console.WriteLine($"Number of Valid Passwords No Large Groups of Numbers: {numberOfValidPasswordsNoLargeGroupsOfNumbers}");
+            Console.WriteLine("-----------------------------");
+            Console.WriteLine("Day 5");
+            Console.WriteLine($"Diagnostic Code: {123}");
             Console.ReadLine();
         }
     }

@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace AdventOfCode.Year2019.Interfaces.ShipComputerFunctions
 {
     public interface IShipComputerFunction
     {
-        bool DoIntCodeWork(int arrayValue1, int arrayValue2, out int result);
+        bool DoIntCodeWork(IEnumerable<int> inputs, out int result);
     }
 }

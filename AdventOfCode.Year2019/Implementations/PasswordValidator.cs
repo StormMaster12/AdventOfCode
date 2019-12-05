@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AdventOfCode.Business.Extensions;
 using AdventOfCode.Year2019.Interfaces;
 
 namespace AdventOfCode.Year2019.Implementations
@@ -9,7 +10,7 @@ namespace AdventOfCode.Year2019.Implementations
     {
         public bool Validate(in int input, int minSizeofGroup = 2, bool limitGroupSizeToMinSize = false)
         {
-            var numbers = ConvertIntToEnumerable(input).ToList();
+            var numbers = input.ConvertIntToEnumerable().ToList();
 
             if (numbers.Count() != 6)
                 return false;
@@ -37,17 +38,6 @@ namespace AdventOfCode.Year2019.Implementations
             return limitGroupSizeToMinSize ? numberPresentCount.ContainsValue(minSizeofGroup) :  numberPresentCount.Any(x => x.Value >= minSizeofGroup);
         }
 
-        private IEnumerable<int> ConvertIntToEnumerable(int input)
-        {
-            var listOfInts = new List<int>();
-            while (input > 0)
-            {
-                listOfInts.Add(input % 10);
-                input = input / 10;
-            }
 
-            listOfInts.Reverse();
-            return listOfInts;
-        }
     }
 }
