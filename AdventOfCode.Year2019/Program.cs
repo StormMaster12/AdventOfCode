@@ -47,7 +47,7 @@ namespace AdventOfCode.Year2019
             var numberOfValidPasswords = passwordGenerator.FindValidPasswords(165432, 707912);
             var numberOfValidPasswordsNoLargeGroupsOfNumbers = passwordGenerator.FindValidPasswordsNoLargeGroupsOfNumbers(165432, 707912);
 
-            var diagnosticProgram = shipComputer.ComputeIntCode(day5FileResult.ToArray());
+            var diagnosticProgram = shipComputer.ComputeIntCode(day5FileResult.ToArray(),1);
 
             Console.WriteLine("Day 1");
             Console.WriteLine($"Fuel Counter Upper: {moduleFuelCount}");

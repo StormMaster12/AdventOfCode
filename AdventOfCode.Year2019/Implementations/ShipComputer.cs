@@ -17,6 +17,8 @@ namespace AdventOfCode.Year2019.Implementations
             {
                 {1, () => new ComputerFunction_IntCode_Add()},
                 {2, () => new ComputerFunction_IntCode_Multiply()},
+                {3, () => new ComputerFunction_IntCode_Return_Input()},
+                {4, () => new ComputerFunction_IntCode_Return_Parameter()},
             };
 
         private readonly Dictionary<int, Func<IShipComputerMode>> shipComputerModes = new Dictionary<int, Func<IShipComputerMode>>()
@@ -27,9 +29,9 @@ namespace AdventOfCode.Year2019.Implementations
 
         private const int STOP_CODE = 99;
 
-        public int[] ComputeIntCode(int[] data)
+        public int[] ComputeIntCode(int[] data, int input = 0)
         {
-            var intCodeLength = 4;
+            int intCodeLength;
 
             for (var i = 0; i < data.Length; i += intCodeLength)
             {
@@ -38,11 +40,10 @@ namespace AdventOfCode.Year2019.Implementations
                 if (opCode == STOP_CODE)
                     break;
 
-                var opCodeList = opCode.ConvertIntToEnumerable().ToList();
-                var storePos = 0;
-                IEnumerable<int> inputList = new List<int>();
+                IEnumerable<int> inputList;
+                int storePos;
 
-                if (opCodeList.Count() == 1)
+                if (opCode == 1 || opCode ==2)
                 {
                     var valuePos1 = data[i + 1];
                     var valuePos2 = data[i + 2];
@@ -51,23 +52,39 @@ namespace AdventOfCode.Year2019.Implementations
                     var value1 = data[valuePos1];
                     var value2 = data[valuePos2];
 
-                    inputList = new List<int>() { value1, value2 };
+                    inputList = new List<int> { value1, value2 };
+                    intCodeLength = 4;
+                }
+                else if (opCode == 3)
+                {
+                    inputList = new List<int> {input};
+                    storePos = data[i + 1];
+                    intCodeLength = 2;
+                }
+                else if (opCode == 4)
+                {
+                    inputList = new List<int> {data[i + 1]};
+                    storePos = data[i + 1];
+                    intCodeLength = 2;
                 }
                 else
                 {
+                    var opCodeList = opCode.ConvertIntToEnumerable().ToList();
                     var handledOpCode = HandleOpCode(opCodeList, data, i + 1);
-                    inputList = handledOpCode.Item2;
+                    inputList = handledOpCode.inputs;
                     opCode = handledOpCode.opCode;
+                    intCodeLength = handledOpCode.length;
 
-                    storePos = i + opCodeList.Count();
+                    storePos = i + opCodeList.Count()-1;
                 }
+                                
 
                 var computerFunction = shipComputerFunctions[opCode].Invoke();
                 if (computerFunction.DoIntCodeWork(inputList, out var result))
                 {
                     data[storePos] = result;
+                    Console.WriteLine($"StorePos: {storePos}. Result: {result}");
                 }
-
             }
 
             return data;
@@ -101,24 +118,25 @@ namespace AdventOfCode.Year2019.Implementations
             return inMemory;
         }
 
-        private (int opCode, IEnumerable<int>) HandleOpCode(IEnumerable<int> opCodes, int[] array, int index)
+        private (int opCode, IEnumerable<int> inputs, int length) HandleOpCode(IEnumerable<int> opCodes, int[] array, int index)
         {
             var opCodesList = opCodes.ToList();
 
-            var endOpCode = opCodesList[^1];
-            var startOpCode = opCodesList[^2];
+            var opCodeList = opCodesList.TakeLast(2).ToList();
             var inputList = new List<int>();
 
-            var opCode = Convert.ToInt32($"{startOpCode}{endOpCode}");
-            var parameters = opCodesList.Take(opCodesList.Count - 2).Reverse().ToList();
+            var opCode = Convert.ToInt32($"{opCodeList[0]}{opCodeList[1]}");
+            var length = opCode == 3 || opCode == 4 ? 3 : opCodes.Count();
 
+            var parameters = opCodesList.Take(opCodesList.Count - 2).Reverse().ToList();
+            
             for (int i = parameters.Count() - 1; i >= 0; i--)
             {
                 var mode = shipComputerModes[parameters[i]].Invoke();
                 inputList.Add(mode.GetValue(array, array[i + index]));
             }
 
-            return (opCode, inputList);
+            return (opCode, inputList, length);
         }
     }
 }
