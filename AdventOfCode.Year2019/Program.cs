@@ -37,6 +37,7 @@ namespace AdventOfCode.Year2019
             var day3FileResult = fileReader.ReadFileToVectorLists("PuzzleInputs/Day_3.txt", ",");
             var day5FileResult = fileReader.ReadFileToNumberListBySeperator("PuzzleInputs/Day_5.txt", ",");
             var day6FileResult = fileReader.ReadFileToValueTuple("PuzzleInputs/Day_6.txt", ")");
+            var day8FileResult = fileReader.ReadFileToIntArray("PuzzleInputs/Day_8.txt");
 
             var moduleFuelCount = fuelCounterUpper.GetRequiredFuleForMultipleModules(day1FileResult);
             var moduleFuelCountWithFuel = fuelCounterUpper.GetRequiredFuleForAllModulesAndFuel(day1FileResult);
@@ -77,6 +78,8 @@ namespace AdventOfCode.Year2019
             Console.WriteLine("Day 6");
             Console.WriteLine($"Number Of Orbits: {numberOfOrbits}");
             Console.WriteLine($"Number Of Transfers: {numberOfTransfers}");
+            Console.WriteLine("-----------------------------");
+            Console.WriteLine("Day 8");
             Console.ReadLine();
         }
     }
