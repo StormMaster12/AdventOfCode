@@ -23,17 +23,20 @@ namespace AdventOfCode.Year2019
                 .AddTransient<IShipComputer, ShipComputer>()
                 .AddTransient<IPasswordValidator, PasswordValidator>()
                 .AddTransient<IPasswordGenerator, PasswordGenerator>()
+                .AddTransient<IOrbitalMapFacility, OrbitalMapFacility>()
                 .BuildServiceProvider();
 
             var fileReader = serviceProvider.GetService<IFileReader>();
             var fuelCounterUpper = serviceProvider.GetService<IFuelManagementSystem>();
             var shipComputer = serviceProvider.GetService<IShipComputer>();
             var passwordGenerator = serviceProvider.GetService<IPasswordGenerator>();
+            var orbitalMapFacility = serviceProvider.GetService<IOrbitalMapFacility>();
 
             var day1FileResult = fileReader.ReadFileByLineToNumberList("PuzzleInputs/Day_1.txt");
             var day2FileResult = fileReader.ReadFileToNumberListBySeperator("PuzzleInputs/Day_2.txt", ",");
             var day3FileResult = fileReader.ReadFileToVectorLists("PuzzleInputs/Day_3.txt", ",");
             var day5FileResult = fileReader.ReadFileToNumberListBySeperator("PuzzleInputs/Day_5.txt", ",");
+            var day6FileResult = fileReader.ReadFileToValueTuple("PuzzleInputs/Day_6.txt", ")");
 
             var moduleFuelCount = fuelCounterUpper.GetRequiredFuleForMultipleModules(day1FileResult);
             var moduleFuelCountWithFuel = fuelCounterUpper.GetRequiredFuleForAllModulesAndFuel(day1FileResult);
@@ -47,7 +50,10 @@ namespace AdventOfCode.Year2019
             var numberOfValidPasswords = passwordGenerator.FindValidPasswords(165432, 707912);
             var numberOfValidPasswordsNoLargeGroupsOfNumbers = passwordGenerator.FindValidPasswordsNoLargeGroupsOfNumbers(165432, 707912);
 
-            var diagnosticProgram = shipComputer.ComputeIntCode(day5FileResult.ToArray(),1);
+            //var diagnosticProgram = shipComputer.ComputeIntCode(day5FileResult.ToArray(),1);
+
+            var numberOfOrbits = orbitalMapFacility.CalculateOrbits(day6FileResult.ToList());
+            var numberOfTransfers = orbitalMapFacility.CalculateOrbitalTransfers(day6FileResult.ToList(), "YOU", "SAN");
 
             Console.WriteLine("Day 1");
             Console.WriteLine($"Fuel Counter Upper: {moduleFuelCount}");
@@ -67,6 +73,10 @@ namespace AdventOfCode.Year2019
             Console.WriteLine("-----------------------------");
             Console.WriteLine("Day 5");
             Console.WriteLine($"Diagnostic Code: {123}");
+            Console.WriteLine("-----------------------------");
+            Console.WriteLine("Day 6");
+            Console.WriteLine($"Number Of Orbits: {numberOfOrbits}");
+            Console.WriteLine($"Number Of Transfers: {numberOfTransfers}");
             Console.ReadLine();
         }
     }

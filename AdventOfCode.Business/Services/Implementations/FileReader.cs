@@ -90,7 +90,6 @@ namespace AdventOfCode.Business.Services.Implementations
             {
                 using (var reader = new StreamReader(stream))
                 {
-
                     while (!reader.EndOfStream)
                     {
                         var fileOutPut = reader.ReadLine();
@@ -100,6 +99,27 @@ namespace AdventOfCode.Business.Services.Implementations
             }
 
             return listOfVectorLists;
+        }
+
+        public IEnumerable<(string parent, string body)> ReadFileToValueTuple(string input, string separator)
+        {
+            var fileInfo = _fileProvider.GetFileInfo(input);
+            var valueTuples = new List<(string parent, string body)>();
+
+            using (var stream = fileInfo.CreateReadStream())
+            {
+                using (var reader = new StreamReader(stream))
+                {
+                    while (!reader.EndOfStream)
+                    {
+                        var fileOutPut = reader.ReadLine();
+                        var splitString = fileOutPut.Split(separator);
+                        valueTuples.Add((parent: splitString[0], body: splitString[1]));
+                    }
+                }
+            }
+
+            return valueTuples;
         }
     }
 }

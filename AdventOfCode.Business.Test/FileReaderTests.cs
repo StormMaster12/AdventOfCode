@@ -86,14 +86,31 @@ namespace AdventOfCode.Business.Test
 
             fileProviderMock.Setup(x => x.GetFileInfo(filePath)).Returns(fileInfoMock.Object);
             fileInfoMock.Setup(x => x.CreateReadStream()).Returns(new MemoryStream(Encoding.UTF8.GetBytes(input)));
-
-
+            
             var result = new FileReader(fileProviderMock.Object).ReadFileToVectorLists(filePath, delimiter).ToList();
             
             Assert.AreEqual(expectedResult[0][0], result[0].ElementAt(0));
             Assert.AreEqual(expectedResult[0][1], result[0].ElementAt(1));
             Assert.AreEqual(expectedResult[0][2], result[0].ElementAt(2));
             Assert.AreEqual(expectedResult[0][3], result[0].ElementAt(3));
+        }
+
+        [TestMethod]
+        public void ConvertStringToValueTuples()
+        {
+            var expectedResult = new List<(string, string)>(){("6WF", "DRK"), ("2PT", "PSM"),("H42", "FN8"), ("1XR", "LQD")};
+            var input = "6WF)DRK\r\n2PT)PSM\r\nH42)FN8\r\n1XR)LQD";
+            var filePath = "testFile.txt";
+
+            var fileProviderMock = new Mock<IFileProvider>();
+            var fileInfoMock = new Mock<IFileInfo>();
+
+            fileProviderMock.Setup(x => x.GetFileInfo(filePath)).Returns(fileInfoMock.Object);
+            fileInfoMock.Setup(x => x.CreateReadStream()).Returns(new MemoryStream(Encoding.UTF8.GetBytes(input)));
+
+            var result = new FileReader(fileProviderMock.Object).ReadFileToValueTuple(filePath, ")").ToList();
+
+            CollectionAssert.AreEqual(expectedResult, result);
         }
     }
 }

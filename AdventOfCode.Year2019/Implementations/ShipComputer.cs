@@ -83,7 +83,6 @@ namespace AdventOfCode.Year2019.Implementations
                 if (computerFunction.DoIntCodeWork(inputList, out var result))
                 {
                     data[storePos] = result;
-                    Console.WriteLine($"StorePos: {storePos}. Result: {result}");
                 }
             }
 
