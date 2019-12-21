@@ -24,6 +24,7 @@ namespace AdventOfCode.Year2019
                 .AddTransient<IPasswordValidator, PasswordValidator>()
                 .AddTransient<IPasswordGenerator, PasswordGenerator>()
                 .AddTransient<IOrbitalMapFacility, OrbitalMapFacility>()
+                .AddTransient<ISpaceImageFormat, SpaceImageFormat>()
                 .BuildServiceProvider();
 
             var fileReader = serviceProvider.GetService<IFileReader>();
@@ -31,6 +32,7 @@ namespace AdventOfCode.Year2019
             var shipComputer = serviceProvider.GetService<IShipComputer>();
             var passwordGenerator = serviceProvider.GetService<IPasswordGenerator>();
             var orbitalMapFacility = serviceProvider.GetService<IOrbitalMapFacility>();
+            var spaceImageFormat = serviceProvider.GetService<ISpaceImageFormat>();
 
             var day1FileResult = fileReader.ReadFileByLineToNumberList("PuzzleInputs/Day_1.txt");
             var day2FileResult = fileReader.ReadFileToNumberListBySeperator("PuzzleInputs/Day_2.txt", ",");
@@ -46,7 +48,7 @@ namespace AdventOfCode.Year2019
             var verbAndNounResult = shipComputer.ComputeIntCodeSpecificValue(day2FileResult.ToArray(), 19690720);
 
             var closestCrossing = fuelCounterUpper.GetFrontPanelWiresClosestCrossingPoint(day3FileResult.ElementAt(0), day3FileResult.ElementAt(1));
-            var shortestWire = fuelCounterUpper.GetFrontPanelWiresShortestPathCrossingPoint(day3FileResult.ElementAt(0),day3FileResult.ElementAt(1));
+            var shortestWire = fuelCounterUpper.GetFrontPanelWiresShortestPathCrossingPoint(day3FileResult.ElementAt(0), day3FileResult.ElementAt(1));
 
             var numberOfValidPasswords = passwordGenerator.FindValidPasswords(165432, 707912);
             var numberOfValidPasswordsNoLargeGroupsOfNumbers = passwordGenerator.FindValidPasswordsNoLargeGroupsOfNumbers(165432, 707912);
@@ -55,6 +57,10 @@ namespace AdventOfCode.Year2019
 
             var numberOfOrbits = orbitalMapFacility.CalculateOrbits(day6FileResult.ToList());
             var numberOfTransfers = orbitalMapFacility.CalculateOrbitalTransfers(day6FileResult.ToList(), "YOU", "SAN");
+
+            var image = spaceImageFormat.DecodeImage(day8FileResult.ToList(), 25, 6);
+            var imageCheck = spaceImageFormat.CheckCorruptedImage(image);
+
 
             Console.WriteLine("Day 1");
             Console.WriteLine($"Fuel Counter Upper: {moduleFuelCount}");
@@ -80,6 +86,8 @@ namespace AdventOfCode.Year2019
             Console.WriteLine($"Number Of Transfers: {numberOfTransfers}");
             Console.WriteLine("-----------------------------");
             Console.WriteLine("Day 8");
+            Console.WriteLine($"Image Corruption Check: {imageCheck}");
+            spaceImageFormat.BuildImage(image);
             Console.ReadLine();
         }
     }

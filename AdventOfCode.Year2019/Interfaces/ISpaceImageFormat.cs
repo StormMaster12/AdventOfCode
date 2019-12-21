@@ -5,6 +5,8 @@ namespace AdventOfCode.Year2019.Interfaces
 {
     public interface ISpaceImageFormat
     {
-        List<Layer> DecodeImage(List<int> input);
+        List<Layer> DecodeImage(List<double> input, int imageWidth, int imageHeight);
+        double CheckCorruptedImage(List<Layer> layers);
+        int BuildImage(List<Layer> input);
     }
 }
