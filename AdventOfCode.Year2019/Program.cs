@@ -44,7 +44,7 @@ namespace AdventOfCode.Year2019
             var moduleFuelCount = fuelCounterUpper.GetRequiredFuleForMultipleModules(day1FileResult);
             var moduleFuelCountWithFuel = fuelCounterUpper.GetRequiredFuleForAllModulesAndFuel(day1FileResult);
 
-            var gravityAssistResult = shipComputer.ComputeIntCode(day2FileResult.ToArray());
+            var gravityAssistResult = shipComputer.ComputeIntCode(day2FileResult.ToArray(), out var a);
             var verbAndNounResult = shipComputer.ComputeIntCodeSpecificValue(day2FileResult.ToArray(), 19690720);
 
             var closestCrossing = fuelCounterUpper.GetFrontPanelWiresClosestCrossingPoint(day3FileResult.ElementAt(0), day3FileResult.ElementAt(1));
@@ -53,7 +53,7 @@ namespace AdventOfCode.Year2019
             var numberOfValidPasswords = passwordGenerator.FindValidPasswords(165432, 707912);
             var numberOfValidPasswordsNoLargeGroupsOfNumbers = passwordGenerator.FindValidPasswordsNoLargeGroupsOfNumbers(165432, 707912);
 
-            //var diagnosticProgram = shipComputer.ComputeIntCode(day5FileResult.ToArray(),1);
+            var diagnosticProgram = shipComputer.ComputeIntCode(day5FileResult.ToArray(),out var result, 1);
 
             var numberOfOrbits = orbitalMapFacility.CalculateOrbits(day6FileResult.ToList());
             var numberOfTransfers = orbitalMapFacility.CalculateOrbitalTransfers(day6FileResult.ToList(), "YOU", "SAN");

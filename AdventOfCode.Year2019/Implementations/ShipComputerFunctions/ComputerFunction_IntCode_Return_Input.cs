@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AdventOfCode.Year2019.Interfaces.ShipComputerFunctions;
-
-namespace AdventOfCode.Year2019.Implementations.ShipComputerFunctions
+﻿namespace AdventOfCode.Year2019.Implementations.ShipComputerFunctions
 {
-    public class ComputerFunction_IntCode_Return_Input : IShipComputerFunction
+    public class ComputerFunction_IntCode_Return_Input : ShipComputerFunctionBase
     {
-        public bool DoIntCodeWork(IEnumerable<int> inputs, out int result)
+        protected override ShipComputerFunctionModel DoWork()
         {
-            result = inputs.First();
-            return true;
+            Data[Data[Position + 1]] = Input;
+            return new ShipComputerFunctionModel()
+            {
+                Data = Data,
+                Position = Position + 1
+            };
         }
     }
 }

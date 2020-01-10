@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AdventOfCode.Business.Extensions;
-using AdventOfCode.Year2019.Implementations.ShipComputerFunctions;
+﻿using AdventOfCode.Year2019.Implementations.ShipComputerFunctions;
 using AdventOfCode.Year2019.Implementations.ShipComputerModes;
 using AdventOfCode.Year2019.Interfaces;
 using AdventOfCode.Year2019.Interfaces.ShipComputerFunctions;
 using AdventOfCode.Year2019.Interfaces.ShipComputerModes;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using AdventOfCode.Business.Extensions;
 
 namespace AdventOfCode.Year2019.Implementations
 {
@@ -18,7 +18,7 @@ namespace AdventOfCode.Year2019.Implementations
                 {1, () => new ComputerFunction_IntCode_Add()},
                 {2, () => new ComputerFunction_IntCode_Multiply()},
                 {3, () => new ComputerFunction_IntCode_Return_Input()},
-                {4, () => new ComputerFunction_IntCode_Return_Parameter()},
+                {4, () => new ComputerFunction_IntCode_Return_Output()},
             };
 
         private readonly Dictionary<int, Func<IShipComputerMode>> shipComputerModes = new Dictionary<int, Func<IShipComputerMode>>()
@@ -29,60 +29,44 @@ namespace AdventOfCode.Year2019.Implementations
 
         private const int STOP_CODE = 99;
 
-        public int[] ComputeIntCode(int[] data, int input = 0)
+        public int[] ComputeIntCode(int[] data, out int output, int input = 0)
         {
-            int intCodeLength;
-
-            for (var i = 0; i < data.Length; i += intCodeLength)
+            output = 0;
+            for (int i = 0; i < data.Length; i++)
             {
-                var opCode = data[i];
+                if (data[i] == STOP_CODE)
+                    return data;
 
-                if (opCode == STOP_CODE)
-                    break;
+                var opCode = data[i].ConvertIntToEnumerable().ToList();
+                var instruction = opCode.Count() == 1 ? opCode[0] : opCode.TakeLast(2).Sum();
 
-                IEnumerable<int> inputList;
-                int storePos;
+                var mode1 = opCode.ElementAtOrDefault(opCode.Count - 3);
+                var mode2 = opCode.ElementAtOrDefault(opCode.Count - 4);
 
-                if (opCode == 1 || opCode ==2)
+                var val1 = mode1 == 1 ? data[i + 1] : data.ElementAtOrDefault(data[i + 1]);
+                var val2 = mode2 == 1 ? data[i + 2] : data.ElementAtOrDefault(data[i + 2]);
+
+                var model = new ShipComputerFunctionModel()
                 {
-                    var valuePos1 = data[i + 1];
-                    var valuePos2 = data[i + 2];
-                    storePos = data[i + 3];
+                    Value2 = val2,
+                    Value1 = val1,
+                    Data = data,
+                    Position = i,
+                    Input = input,
+                    Output = 0
+                };
 
-                    var value1 = data[valuePos1];
-                    var value2 = data[valuePos2];
+                var result = shipComputerFunctions[instruction].Invoke().DoIntCodeWork(model);
+                data = result.Data;
+                i = result.Position;
 
-                    inputList = new List<int> { value1, value2 };
-                    intCodeLength = 4;
-                }
-                else if (opCode == 3)
+                if (input == 1)
                 {
-                    inputList = new List<int> {input};
-                    storePos = data[i + 1];
-                    intCodeLength = 2;
-                }
-                else if (opCode == 4)
-                {
-                    inputList = new List<int> {data[i + 1]};
-                    storePos = data[i + 1];
-                    intCodeLength = 2;
-                }
-                else
-                {
-                    var opCodeList = opCode.ConvertIntToEnumerable().ToList();
-                    var handledOpCode = HandleOpCode(opCodeList, data, i + 1);
-                    inputList = handledOpCode.inputs;
-                    opCode = handledOpCode.opCode;
-                    intCodeLength = handledOpCode.length;
-
-                    storePos = i + opCodeList.Count()-1;
-                }
-                                
-
-                var computerFunction = shipComputerFunctions[opCode].Invoke();
-                if (computerFunction.DoIntCodeWork(inputList, out var result))
-                {
-                    data[storePos] = result;
+                    if (result.Output > 0)
+                    {
+                        output = result.Output;
+                        i = data.Length;
+                    }
                 }
             }
 
@@ -103,7 +87,7 @@ namespace AdventOfCode.Year2019.Implementations
                     inMemory[1] = j;
                     inMemory[2] = i;
 
-                    if (ComputeIntCode(inMemory)[0] != valueToGet)
+                    if (ComputeIntCode(inMemory, out var a)[0] != valueToGet)
                     {
                         input.CopyTo(inMemory, 0);
                     }
@@ -115,27 +99,6 @@ namespace AdventOfCode.Year2019.Implementations
             }
 
             return inMemory;
-        }
-
-        private (int opCode, IEnumerable<int> inputs, int length) HandleOpCode(IEnumerable<int> opCodes, int[] array, int index)
-        {
-            var opCodesList = opCodes.ToList();
-
-            var opCodeList = opCodesList.TakeLast(2).ToList();
-            var inputList = new List<int>();
-
-            var opCode = Convert.ToInt32($"{opCodeList[0]}{opCodeList[1]}");
-            var length = opCode == 3 || opCode == 4 ? 3 : opCodes.Count();
-
-            var parameters = opCodesList.Take(opCodesList.Count - 2).Reverse().ToList();
-            
-            for (int i = parameters.Count() - 1; i >= 0; i--)
-            {
-                var mode = shipComputerModes[parameters[i]].Invoke();
-                inputList.Add(mode.GetValue(array, array[i + index]));
-            }
-
-            return (opCode, inputList, length);
         }
     }
 }
