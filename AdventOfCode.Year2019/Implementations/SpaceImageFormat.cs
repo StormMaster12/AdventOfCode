@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using AdventOfCode.Year2019.Interfaces;
 
@@ -20,7 +21,7 @@ namespace AdventOfCode.Year2019.Implementations
 
                 if (i > 0 && (i + 1) % imageWidth == 0)
                 {
-                    layer.Pixels.Add(pixelRow);
+                    layer.Pixels[rowCount] = pixelRow;
                     pixelRow = new List<double>(imageWidth);
                     rowCount++;
                 }
@@ -44,11 +45,11 @@ namespace AdventOfCode.Year2019.Implementations
             return layer.Pixels.SelectMany(x => x.Where(i => i == 1)).Count() * layer.Pixels.SelectMany(x => x.Where(i => i == 2)).Count();
         }
 
-        public int BuildImage(List<Layer> input)
+        public Layer BuildImage(List<Layer> input)
         {
             var imageHeight = input.First().ImageHeight;
             var imageWidth = input.First().ImageWidth;
-            var picture = new Layer(imageHeight, imageWidth, true);
+            var picture = new Layer(imageHeight, imageWidth);
 
             for (var i = 0; i < imageHeight; i++)
             {
@@ -70,9 +71,9 @@ namespace AdventOfCode.Year2019.Implementations
 
             foreach (var row in picture.Pixels)
             {
-                for (int i = 0; i < row.Count; i++)
+                for (var i = 0; i < row.Count; i++)
                 {
-                    var output = row[i].ToString().Replace("0", " ");
+                    var output = row[i].ToString(CultureInfo.InvariantCulture).Replace("0", " ");
                     Console.Write(output);
                     if (i == row.Count - 1)
                     {
@@ -81,17 +82,15 @@ namespace AdventOfCode.Year2019.Implementations
                 }
             }
 
-            return 0;
+            return picture;
         }
     }
 
-    public class Layer
+    public class Layer : IEquatable<Layer>
     {
         public int ImageHeight;
         public int ImageWidth;
-
         public List<List<double>> Pixels;
-
         public int ZeroCount => Pixels.SelectMany(x => x).Count(x => x == 0);
 
         public Layer(int imageHeight, int imageWidth)
@@ -99,19 +98,36 @@ namespace AdventOfCode.Year2019.Implementations
             ImageHeight = imageHeight;
             ImageWidth = imageWidth;
             Pixels = new List<List<double>>(imageHeight);
+
+            for (int i = 0; i < imageHeight; i++)
+            {
+                Pixels.Add(new List<double>(imageWidth));
+            }
         }
 
-        public Layer(int imageHeight, int imageWidth, bool prePopulatePixels)
+        public bool Equals(Layer other)
         {
-            ImageHeight = imageHeight;
-            ImageWidth = imageWidth;
-            Pixels = new List<List<double>>(imageHeight);
-            if (prePopulatePixels)
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return ImageHeight == other.ImageHeight && ImageWidth == other.ImageWidth && Pixels.SequenceEqual(other.Pixels);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Layer) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
             {
-                for (int i = 0; i < imageHeight; i++)
-                {
-                    Pixels.Add(new List<double>(imageWidth));
-                }
+                var hashCode = ImageHeight;
+                hashCode = (hashCode * 397) ^ ImageWidth;
+                hashCode = (hashCode * 397) ^ (Pixels != null ? Pixels.GetHashCode() : 0);
+                return hashCode;
             }
         }
     }

@@ -7,6 +7,6 @@ namespace AdventOfCode.Year2019.Interfaces
     {
         List<Layer> DecodeImage(List<double> input, int imageWidth, int imageHeight);
         double CheckCorruptedImage(List<Layer> layers);
-        int BuildImage(List<Layer> input);
+        Layer BuildImage(List<Layer> input);
     }
 }

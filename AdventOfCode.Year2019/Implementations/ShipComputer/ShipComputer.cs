@@ -8,7 +8,7 @@ using AdventOfCode.Year2019.Interfaces;
 using AdventOfCode.Year2019.Interfaces.ShipComputerFunctions;
 using AdventOfCode.Year2019.Interfaces.ShipComputerModes;
 
-namespace AdventOfCode.Year2019.Implementations
+namespace AdventOfCode.Year2019.Implementations.ShipComputer
 {
     public class ShipComputer : IShipComputer
     {
@@ -33,17 +33,18 @@ namespace AdventOfCode.Year2019.Implementations
         {
             int intCodeLength;
 
-            for (var i = 0; i < data.Length; i += intCodeLength)
+            var i = 0;
+            while (i < data.Length)
             {
                 var opCode = data[i];
 
                 if (opCode == STOP_CODE)
                     break;
 
-                IEnumerable<int> inputList;
-                int storePos;
+                IEnumerable<int> inputList = null;
+                int storePos = 0;
 
-                if (opCode == 1 || opCode ==2)
+                if (opCode == 1 || opCode == 2)
                 {
                     var valuePos1 = data[i + 1];
                     var valuePos2 = data[i + 2];
@@ -57,15 +58,43 @@ namespace AdventOfCode.Year2019.Implementations
                 }
                 else if (opCode == 3)
                 {
-                    inputList = new List<int> {input};
+                    inputList = new List<int> { input };
                     storePos = data[i + 1];
                     intCodeLength = 2;
                 }
                 else if (opCode == 4)
                 {
-                    inputList = new List<int> {data[i + 1]};
+                    inputList = new List<int> { data[i + 1] };
                     storePos = data[i + 1];
                     intCodeLength = 2;
+                }
+                else if (opCode == 5)
+                {
+                    if (data[i + 1] > 0)
+                    {
+                        i = data[i + 2];
+                        continue;
+                    }
+                    intCodeLength = 2;
+                }
+                else if (opCode == 6)
+                {
+                    if (data[i + 1] == 0)
+                    {
+                        i = data[i + 2];
+                        continue;
+                    }
+                    intCodeLength = 2;
+                }
+                else if (opCode == 7)
+                {
+                    data[data[i + 3]] = data[i + 1] < data[i + 2] ? 1 : 0;
+                    intCodeLength = 3;
+                }
+                else if (opCode == 8)
+                {
+                    data[data[i + 3]] = data[i + 1] == data[i + 2] ? 1 : 0;
+                    intCodeLength = 3;
                 }
                 else
                 {
@@ -73,17 +102,18 @@ namespace AdventOfCode.Year2019.Implementations
                     var handledOpCode = HandleOpCode(opCodeList, data, i + 1);
                     inputList = handledOpCode.inputs;
                     opCode = handledOpCode.opCode;
-                    intCodeLength = handledOpCode.length;
+                    intCodeLength = handledOpCode.length + 1;
 
-                    storePos = i + opCodeList.Count()-1;
+                    storePos = data[i + opCodeList.Count - 1];
                 }
-                                
 
                 var computerFunction = shipComputerFunctions[opCode].Invoke();
                 if (computerFunction.DoIntCodeWork(inputList, out var result))
                 {
                     data[storePos] = result;
                 }
+
+                i += intCodeLength;
             }
 
             return data;
@@ -128,7 +158,7 @@ namespace AdventOfCode.Year2019.Implementations
             var length = opCode == 3 || opCode == 4 ? 3 : opCodes.Count();
 
             var parameters = opCodesList.Take(opCodesList.Count - 2).Reverse().ToList();
-            
+
             for (int i = parameters.Count() - 1; i >= 0; i--)
             {
                 var mode = shipComputerModes[parameters[i]].Invoke();

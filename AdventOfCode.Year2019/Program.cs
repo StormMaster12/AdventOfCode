@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using AdventOfCode.Business.Services.Implementations;
 using AdventOfCode.Business.Services.Interfaces;
 using AdventOfCode.Year2019.Implementations;
+using AdventOfCode.Year2019.Implementations.ShipComputer;
 using AdventOfCode.Year2019.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -37,7 +39,9 @@ namespace AdventOfCode.Year2019
             var day1FileResult = fileReader.ReadFileByLineToNumberList("PuzzleInputs/Day_1.txt");
             var day2FileResult = fileReader.ReadFileToNumberListBySeperator("PuzzleInputs/Day_2.txt", ",");
             var day3FileResult = fileReader.ReadFileToVectorLists("PuzzleInputs/Day_3.txt", ",");
+            var day4FileResult = "";
             var day5FileResult = fileReader.ReadFileToNumberListBySeperator("PuzzleInputs/Day_5.txt", ",");
+            var day7FileResult = "";
             var day6FileResult = fileReader.ReadFileToValueTuple("PuzzleInputs/Day_6.txt", ")");
             var day8FileResult = fileReader.ReadFileToIntArray("PuzzleInputs/Day_8.txt");
 
@@ -53,7 +57,7 @@ namespace AdventOfCode.Year2019
             var numberOfValidPasswords = passwordGenerator.FindValidPasswords(165432, 707912);
             var numberOfValidPasswordsNoLargeGroupsOfNumbers = passwordGenerator.FindValidPasswordsNoLargeGroupsOfNumbers(165432, 707912);
 
-            //var diagnosticProgram = shipComputer.ComputeIntCode(day5FileResult.ToArray(),1);
+            var diagnosticProgram = shipComputer.ComputeIntCode(day5FileResult.ToArray(),1);
 
             var numberOfOrbits = orbitalMapFacility.CalculateOrbits(day6FileResult.ToList());
             var numberOfTransfers = orbitalMapFacility.CalculateOrbitalTransfers(day6FileResult.ToList(), "YOU", "SAN");
@@ -79,7 +83,7 @@ namespace AdventOfCode.Year2019
             Console.WriteLine($"Number of Valid Passwords No Large Groups of Numbers: {numberOfValidPasswordsNoLargeGroupsOfNumbers}");
             Console.WriteLine("-----------------------------");
             Console.WriteLine("Day 5");
-            Console.WriteLine($"Diagnostic Code: {123}");
+            Console.WriteLine($"Diagnostic Code: {diagnosticProgram}");
             Console.WriteLine("-----------------------------");
             Console.WriteLine("Day 6");
             Console.WriteLine($"Number Of Orbits: {numberOfOrbits}");

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using AdventOfCode.Year2019.Implementations;
+using AdventOfCode.Year2019.Implementations.ShipComputer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AdventOfCode.Year2019.Test
