@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AdventOfCode.Year2019.Interfaces.ShipComputerFunctions;
-
-namespace AdventOfCode.Year2019.Implementations.ShipComputerFunctions
+﻿namespace AdventOfCode.Year2019.Implementations.ShipComputerFunctions
 {
-    public class ComputerFunction_IntCode_Add : IShipComputerFunction
+    public class ComputerFunction_IntCode_Add : ShipComputerFunctionBase
     {
-        public bool DoIntCodeWork(IEnumerable<int> inputs, out int result)
+        protected override ShipComputerFunctionModel DoWork()
         {
-            result = inputs.Sum();
-            return true;
+            Data[Data[Position + 3]] = Value2 + Value1;
+            
+            return new ShipComputerFunctionModel()
+            {
+                Data = Data,
+                Position = Position + 3
+            };
         }
     }
 }

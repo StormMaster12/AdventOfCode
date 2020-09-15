@@ -18,7 +18,7 @@ namespace AdventOfCode.Year2019.Test
         [DataRow(new[] { 4, 2, 1, 0, 0, 0, 99 }, new[] { 16, 2, 2, 0, 0, 0, 99 })]
         public void IntCodeCalculations(int[] data, int[] expectedResult)
         {
-            var result = new ShipComputer().ComputeIntCode(data);
+            var result = new ShipComputer().ComputeIntCode(data, out var a);
 
             Assert.IsTrue(expectedResult.SequenceEqual(result));
         }
@@ -27,7 +27,7 @@ namespace AdventOfCode.Year2019.Test
         [DataRow(new[] { 3, 1, 4, 2, 1, 0, 0, 0, 99 }, 2, new[] { 6, 2, 2, 2, 1, 0, 0, 0, 99 })]
         public void IntCodeCalculations_With_Input(int[] data, int input, int[] expectedResult)
         {
-            var result = new ShipComputer().ComputeIntCode(data, input);
+            var result = new ShipComputer().ComputeIntCode(data, out var a, input);
 
             Assert.IsTrue(expectedResult.SequenceEqual(result));
         }

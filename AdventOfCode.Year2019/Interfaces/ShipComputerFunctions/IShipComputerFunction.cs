@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using AdventOfCode.Year2019.Implementations.ShipComputerFunctions;
 
 namespace AdventOfCode.Year2019.Interfaces.ShipComputerFunctions
 {
     public interface IShipComputerFunction
     {
-        bool DoIntCodeWork(IEnumerable<int> inputs, out int result);
+        ShipComputerFunctionModel DoIntCodeWork(ShipComputerFunctionModel model);
     }
 }
