@@ -83,7 +83,7 @@ namespace AdventOfCode.Year2019
             Console.WriteLine($"Number of Valid Passwords No Large Groups of Numbers: {numberOfValidPasswordsNoLargeGroupsOfNumbers}");
             Console.WriteLine("-----------------------------");
             Console.WriteLine("Day 5");
-            Console.WriteLine($"Diagnostic Code: {diagnosticProgram}");
+            Console.WriteLine($"Diagnostic Code: {result}");
             Console.WriteLine("-----------------------------");
             Console.WriteLine("Day 6");
             Console.WriteLine($"Number Of Orbits: {numberOfOrbits}");
