@@ -17,7 +17,6 @@ namespace AdventOfCode.Year2019.Implementations
 
             var previousNumber = 0;
             var numberPresentCount = new Dictionary<int, int>();
-            var foundPair = false;
 
             foreach (var number in numbers)
             {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AdventOfCode.Business.Extensions;
+using AdventOfCode.Year2019.Implementations.ShipComputer.ShipComputerFunctions;
 using AdventOfCode.Year2019.Implementations.ShipComputerFunctions;
 using AdventOfCode.Year2019.Implementations.ShipComputerModes;
 using AdventOfCode.Year2019.Interfaces;
@@ -19,6 +20,10 @@ namespace AdventOfCode.Year2019.Implementations.ShipComputer
                 {2, () => new ComputerFunction_IntCode_Multiply()},
                 {3, () => new ComputerFunction_IntCode_Return_Input()},
                 {4, () => new ComputerFunction_IntCode_Return_Output()},
+                {5 , () => new ComputerFunction_IntCode_JumpIfTrue() },
+                {6, () => new ComputerFunction_IntCode_JumpIfFalse() },
+                {7, () => new ComputerFunction_IntCode_LessThan() },
+                {8, () => new ComputerFunction_IntCode_EqualTo() }
             };
 
         private readonly Dictionary<int, Func<IShipComputerMode>> shipComputerModes = new Dictionary<int, Func<IShipComputerMode>>()
@@ -45,11 +50,14 @@ namespace AdventOfCode.Year2019.Implementations.ShipComputer
 
                 var val1 = mode1 == 1 ? data[i + 1] : data.ElementAtOrDefault(data[i + 1]);
                 var val2 = mode2 == 1 ? data[i + 2] : data.ElementAtOrDefault(data[i + 2]);
+                var val3 = data.ElementAtOrDefault(i + 3);
 
                 var model = new ShipComputerFunctionModel()
                 {
+                    Instruction = instruction,
                     Value2 = val2,
                     Value1 = val1,
+                    Value3 = val3,
                     Data = data,
                     Position = i,
                     Input = input,
@@ -60,7 +68,7 @@ namespace AdventOfCode.Year2019.Implementations.ShipComputer
                 data = result.Data;
                 i = result.Position;
 
-                if (input == 1)
+                if (input > 0)
                 {
                     if (result.Output > 0)
                     {

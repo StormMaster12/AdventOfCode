@@ -8,5 +8,7 @@
         public int Position { get; set; }
         public int Input { get; set; }
         public int Output { get; set; }
+        public int Value3 { get; set; }
+        public int Instruction { get; set; }
     }
 }
