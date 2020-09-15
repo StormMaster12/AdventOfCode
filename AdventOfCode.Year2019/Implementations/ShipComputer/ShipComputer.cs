@@ -13,7 +13,7 @@ namespace AdventOfCode.Year2019.Implementations.ShipComputer
 {
     public class ShipComputer : IShipComputer
     {
-        private readonly Dictionary<int, Func<IShipComputerFunction>> shipComputerFunctions = new
+        private readonly Dictionary<int, Func<IShipComputerFunction>> _shipComputerFunctions = new
             Dictionary<int, Func<IShipComputerFunction>>
             {
                 {1, () => new ComputerFunction_IntCode_Add()},
@@ -25,12 +25,6 @@ namespace AdventOfCode.Year2019.Implementations.ShipComputer
                 {7, () => new ComputerFunction_IntCode_LessThan() },
                 {8, () => new ComputerFunction_IntCode_EqualTo() }
             };
-
-        private readonly Dictionary<int, Func<IShipComputerMode>> shipComputerModes = new Dictionary<int, Func<IShipComputerMode>>()
-        {
-            {0,  () => new ShipComputerMode_Position() },
-            {1,  () => new ShipComputerMode_Immediate() },
-        };
 
         private const int STOP_CODE = 99;
 
@@ -64,7 +58,7 @@ namespace AdventOfCode.Year2019.Implementations.ShipComputer
                     Output = 0
                 };
 
-                var result = shipComputerFunctions[instruction].Invoke().DoIntCodeWork(model);
+                var result = _shipComputerFunctions[instruction].Invoke().DoIntCodeWork(model);
                 data = result.Data;
                 i = result.Position;
 
