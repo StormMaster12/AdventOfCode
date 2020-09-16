@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode.Year2019.Interfaces.ShipComputerModes
+﻿namespace AdventOfCode.Year2019.Interfaces.ShipComputer.ShipComputerModes
 {
     interface IShipComputerMode
     {

@@ -1,6 +1,4 @@
-﻿using AdventOfCode.Year2019.Implementations.ShipComputerFunctions;
-
-namespace AdventOfCode.Year2019.Implementations.ShipComputer.ShipComputerFunctions
+﻿namespace AdventOfCode.Year2019.Implementations.ShipComputer.ShipComputerFunctions
 {
     public class ComputerFunction_IntCode_JumpIfFalse : ShipComputerFunctionBase
     {

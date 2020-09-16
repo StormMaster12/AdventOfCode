@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AdventOfCode.Year2019.Interfaces.ShipComputerModes;
+﻿using AdventOfCode.Year2019.Interfaces.ShipComputer.ShipComputerModes;
 
-namespace AdventOfCode.Year2019.Implementations.ShipComputerModes
+namespace AdventOfCode.Year2019.Implementations.ShipComputer.ShipComputerModes
 {
     class ShipComputerMode_Immediate : IShipComputerMode
     {

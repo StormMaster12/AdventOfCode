@@ -1,6 +1,6 @@
-﻿using AdventOfCode.Year2019.Interfaces.ShipComputerFunctions;
+﻿using AdventOfCode.Year2019.Interfaces.ShipComputer.ShipComputerFunctions;
 
-namespace AdventOfCode.Year2019.Implementations.ShipComputerFunctions
+namespace AdventOfCode.Year2019.Implementations.ShipComputer.ShipComputerFunctions
 {
     public abstract class ShipComputerFunctionBase : IShipComputerFunction
     {

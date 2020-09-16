@@ -7,6 +7,7 @@ using AdventOfCode.Business.Services.Interfaces;
 using AdventOfCode.Year2019.Implementations;
 using AdventOfCode.Year2019.Implementations.ShipComputer;
 using AdventOfCode.Year2019.Interfaces;
+using AdventOfCode.Year2019.Interfaces.ShipComputer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 
@@ -41,7 +42,7 @@ namespace AdventOfCode.Year2019
             var day3FileResult = fileReader.ReadFileToVectorLists("PuzzleInputs/Day_3.txt", ",");
             var day5FileResult = fileReader.ReadFileToNumberListBySeperator("PuzzleInputs/Day_5.txt", ",");
             var day6FileResult = fileReader.ReadFileToValueTuple("PuzzleInputs/Day_6.txt", ")");
-            //var day7FileResult = "";
+            var day7FileResult = fileReader.ReadFileToNumberListBySeperator("PuzzleInputs/Day_7.txt", ",");
             var day8FileResult = fileReader.ReadFileToIntArray("PuzzleInputs/Day_8.txt");
 
             var moduleFuelCount = fuelCounterUpper.GetRequiredFuleForMultipleModules(day1FileResult);

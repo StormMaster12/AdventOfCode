@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode.Year2019.Interfaces
+﻿namespace AdventOfCode.Year2019.Interfaces.ShipComputer
 {
     public interface IShipComputer
     {

@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using AdventOfCode.Business.Extensions;
 using AdventOfCode.Year2019.Implementations.ShipComputer.ShipComputerFunctions;
-using AdventOfCode.Year2019.Implementations.ShipComputerFunctions;
-using AdventOfCode.Year2019.Implementations.ShipComputerModes;
 using AdventOfCode.Year2019.Interfaces;
-using AdventOfCode.Year2019.Interfaces.ShipComputerFunctions;
-using AdventOfCode.Year2019.Interfaces.ShipComputerModes;
+using AdventOfCode.Year2019.Interfaces.ShipComputer;
+using AdventOfCode.Year2019.Interfaces.ShipComputer.ShipComputerFunctions;
 
 namespace AdventOfCode.Year2019.Implementations.ShipComputer
 {
