@@ -29,46 +29,7 @@ namespace AdventOfCode.Year2019.Implementations.ShipComputer
         public int[] ComputeIntCode(int[] data, out int output, int input = 0)
         {
             output = 0;
-            for (int i = 0; i < data.Length; i++)
-            {
-                if (data[i] == STOP_CODE)
-                    return data;
-
-                var opCode = data[i].ConvertIntToEnumerable().ToList();
-                var instruction = opCode.Count() == 1 ? opCode[0] : opCode.TakeLast(2).Sum();
-
-                var mode1 = opCode.ElementAtOrDefault(opCode.Count - 3);
-                var mode2 = opCode.ElementAtOrDefault(opCode.Count - 4);
-
-                var val1 = mode1 == 1 ? data[i + 1] : data.ElementAtOrDefault(data[i + 1]);
-                var val2 = mode2 == 1 ? data[i + 2] : data.ElementAtOrDefault(data[i + 2]);
-                var val3 = data.ElementAtOrDefault(i + 3);
-
-                var model = new ShipComputerFunctionModel()
-                {
-                    Instruction = instruction,
-                    Value2 = val2,
-                    Value1 = val1,
-                    Value3 = val3,
-                    Data = data,
-                    Position = i,
-                    Input = input,
-                    Output = 0
-                };
-
-                var result = _shipComputerFunctions[instruction].Invoke().DoIntCodeWork(model);
-                data = result.Data;
-                i = result.Position;
-
-                if (input > 0)
-                {
-                    if (result.Output > 0)
-                    {
-                        output = result.Output;
-                        i = data.Length;
-                    }
-                }
-            }
+            data = ComputeIntCode(data, out output, new Queue<int>(new[] { input }), out bool halted);
 
             return data;
         }
@@ -99,6 +60,73 @@ namespace AdventOfCode.Year2019.Implementations.ShipComputer
             }
 
             return inMemory;
+        }
+
+        public int[] ComputeIntCode(int[] data, out int output, Queue<int> inputs, out bool halted)
+        {
+            output = 0;
+            halted = false;
+            var paused = false;
+            var input = 0;
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (data[i] == STOP_CODE)
+                {
+                    halted = true;
+                    return data;
+                }
+
+                var opCode = data[i].ConvertIntToEnumerable().ToList();
+                var instruction = opCode.Count() == 1 ? opCode[0] : opCode.TakeLast(2).Sum();
+
+                var mode1 = opCode.ElementAtOrDefault(opCode.Count - 3);
+                var mode2 = opCode.ElementAtOrDefault(opCode.Count - 4);
+
+                var val1 = mode1 == 1 ? data[i + 1] : data.ElementAtOrDefault(data[i + 1]);
+                var val2 = mode2 == 1 ? data[i + 2] : data.ElementAtOrDefault(data[i + 2]);
+                var val3 = data.ElementAtOrDefault(i + 3);
+
+                var model = new ShipComputerFunctionModel()
+                {
+                    Instruction = instruction,
+                    Value2 = val2,
+                    Value1 = val1,
+                    Value3 = val3,
+                    Data = data,
+                    Position = i,
+                    Output = 0
+                };
+
+                if (!_shipComputerFunctions.ContainsKey(instruction))
+                {
+                    halted = true;
+                    return data;
+                }
+
+                var computerFunction = _shipComputerFunctions[instruction].Invoke();
+
+                if (inputs.Count != 0 && computerFunction is ComputerFunction_IntCode_Return_Input)
+                {
+                    model.Input = inputs.Dequeue();
+                    input = model.Input;
+                }
+
+                var result = computerFunction.DoIntCodeWork(model);
+                data = result.Data;
+                i = result.Position;
+
+                if (result.Output > 0)
+                {
+                    output = result.Output;
+                    paused = true;
+                }
+
+                if(halted || paused) break;
+            }
+
+            //halted = true;
+            return data;
         }
     }
 }

@@ -28,6 +28,7 @@ namespace AdventOfCode.Year2019
                 .AddTransient<IPasswordGenerator, PasswordGenerator>()
                 .AddTransient<IOrbitalMapFacility, OrbitalMapFacility>()
                 .AddTransient<ISpaceImageFormat, SpaceImageFormat>()
+                .AddTransient<IAmplifierCircuit, AmplifierCircuit>()
                 .BuildServiceProvider();
 
             var fileReader = serviceProvider.GetService<IFileReader>();
@@ -36,6 +37,7 @@ namespace AdventOfCode.Year2019
             var passwordGenerator = serviceProvider.GetService<IPasswordGenerator>();
             var orbitalMapFacility = serviceProvider.GetService<IOrbitalMapFacility>();
             var spaceImageFormat = serviceProvider.GetService<ISpaceImageFormat>();
+            var amplifierCircuit = serviceProvider.GetService<IAmplifierCircuit>();
 
             var day1FileResult = fileReader.ReadFileByLineToNumberList("PuzzleInputs/Day_1.txt");
             var day2FileResult = fileReader.ReadFileToNumberListBySeperator("PuzzleInputs/Day_2.txt", ",");
@@ -93,7 +95,10 @@ namespace AdventOfCode.Year2019
             Console.WriteLine($"Number Of Transfers: {numberOfTransfers}");
             Console.WriteLine("-----------------------------");
 
+            var maxAmplification = amplifierCircuit.CalculateHighestAmplification(day7FileResult.ToArray());
+
             Console.WriteLine("Day 7");
+            Console.WriteLine($"Highest Ammplification: {maxAmplification}");
             Console.WriteLine("-----------------------------");
 
             var image = spaceImageFormat.DecodeImage(day8FileResult.ToList(), 25, 6);
