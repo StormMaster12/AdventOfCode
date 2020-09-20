@@ -11,8 +11,7 @@ namespace AdventOfCode.Year2019.Implementations.ShipComputer
 {
     public class ShipComputer : IShipComputer
     {
-        private readonly Dictionary<int, Func<IShipComputerFunction>> _shipComputerFunctions = new
-            Dictionary<int, Func<IShipComputerFunction>>
+        private readonly Dictionary<int, Func<IShipComputerFunction>> _shipComputerFunctions = new Dictionary<int, Func<IShipComputerFunction>>
             {
                 {1, () => new ComputerFunction_IntCode_Add()},
                 {2, () => new ComputerFunction_IntCode_Multiply()},
@@ -25,6 +24,16 @@ namespace AdventOfCode.Year2019.Implementations.ShipComputer
             };
 
         private const int STOP_CODE = 99;
+        private int[] _program;
+        private bool _paused = false;
+        private int _position = 0;
+        private int _relativeBase = 0;
+
+        public void Reset()
+        {
+            _paused = false;
+            _program = null;
+        }
 
         public int[] ComputeIntCode(int[] data, out int output, int input = 0)
         {
@@ -66,26 +75,31 @@ namespace AdventOfCode.Year2019.Implementations.ShipComputer
         {
             output = 0;
             halted = false;
-            var paused = false;
             var input = 0;
 
-            for (int i = 0; i < data.Length; i++)
+            if (!_paused)
+                _program = data;
+
+            for (var i = _position; i < _program.Length; i++)
             {
-                if (data[i] == STOP_CODE)
+                _paused = false;
+                halted = false;
+
+                if (_program[i] == STOP_CODE)
                 {
                     halted = true;
-                    return data;
+                    return _program;
                 }
 
-                var opCode = data[i].ConvertIntToEnumerable().ToList();
+                var opCode = _program[i].ConvertIntToEnumerable().ToList();
                 var instruction = opCode.Count() == 1 ? opCode[0] : opCode.TakeLast(2).Sum();
 
                 var mode1 = opCode.ElementAtOrDefault(opCode.Count - 3);
                 var mode2 = opCode.ElementAtOrDefault(opCode.Count - 4);
 
-                var val1 = mode1 == 1 ? data[i + 1] : data.ElementAtOrDefault(data[i + 1]);
-                var val2 = mode2 == 1 ? data[i + 2] : data.ElementAtOrDefault(data[i + 2]);
-                var val3 = data.ElementAtOrDefault(i + 3);
+                var val1 = mode1 == 1 ? _program[i + 1] : _program.ElementAtOrDefault(_program[i + 1]);
+                var val2 = mode2 == 1 ? _program[i + 2] : _program.ElementAtOrDefault(_program[i + 2]);
+                var val3 = _program.ElementAtOrDefault(i + 3);
 
                 var model = new ShipComputerFunctionModel()
                 {
@@ -93,7 +107,7 @@ namespace AdventOfCode.Year2019.Implementations.ShipComputer
                     Value2 = val2,
                     Value1 = val1,
                     Value3 = val3,
-                    Data = data,
+                    Data = _program,
                     Position = i,
                     Output = 0
                 };
@@ -101,7 +115,7 @@ namespace AdventOfCode.Year2019.Implementations.ShipComputer
                 if (!_shipComputerFunctions.ContainsKey(instruction))
                 {
                     halted = true;
-                    return data;
+                    return _program;
                 }
 
                 var computerFunction = _shipComputerFunctions[instruction].Invoke();
@@ -113,20 +127,20 @@ namespace AdventOfCode.Year2019.Implementations.ShipComputer
                 }
 
                 var result = computerFunction.DoIntCodeWork(model);
-                data = result.Data;
+                _program = result.Data;
                 i = result.Position;
 
                 if (result.Output > 0)
                 {
                     output = result.Output;
-                    paused = true;
+                    _paused = true;
+                    _position = i + 1;
                 }
 
-                if(halted || paused) break;
+                if (halted || _paused) break;
             }
 
-            //halted = true;
-            return data;
+            return _program;
         }
     }
 }

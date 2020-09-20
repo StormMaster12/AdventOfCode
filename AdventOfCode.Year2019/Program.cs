@@ -95,10 +95,12 @@ namespace AdventOfCode.Year2019
             Console.WriteLine($"Number Of Transfers: {numberOfTransfers}");
             Console.WriteLine("-----------------------------");
 
-            var maxAmplification = amplifierCircuit.CalculateHighestAmplification(day7FileResult.ToArray());
+            var maxAmplification = amplifierCircuit.CalculateHighestAmplification(day7FileResult.ToArray(), false);
+            var feedbackAmplification = amplifierCircuit.CalculateHighestAmplification(day7FileResult.ToArray(), true);
 
             Console.WriteLine("Day 7");
             Console.WriteLine($"Highest Ammplification: {maxAmplification}");
+            Console.WriteLine($"Feedback Ammplification: {feedbackAmplification}");
             Console.WriteLine("-----------------------------");
 
             var image = spaceImageFormat.DecodeImage(day8FileResult.ToList(), 25, 6);

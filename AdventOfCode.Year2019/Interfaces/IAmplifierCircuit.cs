@@ -2,7 +2,6 @@
 {
     public interface IAmplifierCircuit
     {
-        int Amplify(int[] data, int input, int[] phaseSetting);
-        int CalculateHighestAmplification(int[] data);
+        int CalculateHighestAmplification(int[] data, bool feedback);
     }
 }
