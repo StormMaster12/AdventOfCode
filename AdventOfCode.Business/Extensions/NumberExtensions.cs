@@ -2,7 +2,7 @@
 
 namespace AdventOfCode.Business.Extensions
 {
-    public static class IntExtensions
+    public static class NumberExtensions
     {
         public static IEnumerable<int> ConvertIntToEnumerable(this int input)
         {

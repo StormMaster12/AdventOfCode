@@ -1,16 +1,18 @@
-﻿using AdventOfCode.Year2019.Interfaces.ShipComputer.ShipComputerFunctions;
+﻿using System.Collections.Generic;
+using AdventOfCode.Year2019.Interfaces.ShipComputer.ShipComputerFunctions;
 
 namespace AdventOfCode.Year2019.Implementations.ShipComputer.ShipComputerFunctions
 {
     public abstract class ShipComputerFunctionBase : IShipComputerFunction
     {
-        protected int Instruction { get; set; }
-        protected int Value1 { get; set; }
-        protected int Value2 { get; set; }
-        protected  int Value3 { get; set; }
-        protected int Position { get; set; }
-        protected int[] Data { get; set; }
-        protected int Input { get; set; }
+        protected double Instruction { get; set; }
+        protected double Value1 { get; set; }
+        protected double Value2 { get; set; }
+        protected double Value3 { get; set; }
+        protected double Position { get; set; }
+        protected double[] Data { get; set; }
+        protected Queue<double> Input { get; set; }
+        protected double RelativeBase { get; set; }
 
         public ShipComputerFunctionModel DoIntCodeWork(ShipComputerFunctionModel model)
         {
@@ -21,6 +23,7 @@ namespace AdventOfCode.Year2019.Implementations.ShipComputer.ShipComputerFunctio
             Data = model.Data;
             Input = model.Input;
             Instruction = model.Instruction;
+            RelativeBase = model.RelativeBase ?? 0;
 
             return DoWork();
         }

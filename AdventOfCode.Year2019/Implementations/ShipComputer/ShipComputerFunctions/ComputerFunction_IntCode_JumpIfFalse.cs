@@ -6,7 +6,6 @@
         {
             if (Value1 == 0)
             {
-                //Position = Data[Data[Value2]] -1;
                 Position = Value2 - 1;
             }
             else

@@ -4,7 +4,7 @@
     {
         protected override ShipComputerFunctionModel DoWork()
         {
-            Data[Data[Position + 1]] = Input;
+            Data[(int)Data[(int)Position + 1]] = Input.Dequeue();
             return new ShipComputerFunctionModel()
             {
                 Data = Data,

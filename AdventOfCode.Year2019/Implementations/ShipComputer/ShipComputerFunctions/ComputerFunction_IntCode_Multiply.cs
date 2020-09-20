@@ -4,7 +4,7 @@
     {
         protected override ShipComputerFunctionModel DoWork()
         {
-            Data[Data[Position + 3]] = Value2 * Value1;
+            Data[(int)Data[(int)Position + 3]] = Value2 * Value1;
 
             return new ShipComputerFunctionModel()
             {

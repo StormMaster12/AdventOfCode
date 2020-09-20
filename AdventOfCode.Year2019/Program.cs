@@ -40,12 +40,13 @@ namespace AdventOfCode.Year2019
             var amplifierCircuit = serviceProvider.GetService<IAmplifierCircuit>();
 
             var day1FileResult = fileReader.ReadFileByLineToNumberList("PuzzleInputs/Day_1.txt");
-            var day2FileResult = fileReader.ReadFileToNumberListBySeperator("PuzzleInputs/Day_2.txt", ",");
+            var day2FileResult = fileReader.ReadFileToNumberListBySeperatorDouble("PuzzleInputs/Day_2.txt", ",");
             var day3FileResult = fileReader.ReadFileToVectorLists("PuzzleInputs/Day_3.txt", ",");
-            var day5FileResult = fileReader.ReadFileToNumberListBySeperator("PuzzleInputs/Day_5.txt", ",");
+            var day5FileResult = fileReader.ReadFileToNumberListBySeperatorDouble("PuzzleInputs/Day_5.txt", ",");
             var day6FileResult = fileReader.ReadFileToValueTuple("PuzzleInputs/Day_6.txt", ")");
-            var day7FileResult = fileReader.ReadFileToNumberListBySeperator("PuzzleInputs/Day_7.txt", ",");
+            var day7FileResult = fileReader.ReadFileToNumberListBySeperatorDouble("PuzzleInputs/Day_7.txt", ",");
             var day8FileResult = fileReader.ReadFileToIntArray("PuzzleInputs/Day_8.txt");
+            var day9FileResult = fileReader.ReadFileToNumberListBySeperatorDouble("PuzzleInputs/Day_9.txt", ",");
 
             var moduleFuelCount = fuelCounterUpper.GetRequiredFuleForMultipleModules(day1FileResult);
             var moduleFuelCountWithFuel = fuelCounterUpper.GetRequiredFuleForAllModulesAndFuel(day1FileResult);
@@ -56,6 +57,8 @@ namespace AdventOfCode.Year2019
             Console.WriteLine("-----------------------------");
 
             var gravityAssistResult = shipComputer.ComputeIntCode(day2FileResult.ToArray(), out var a);
+
+            shipComputer = serviceProvider.GetService<IShipComputer>();
             var verbAndNounResult = shipComputer.ComputeIntCodeSpecificValue(day2FileResult.ToArray(), 19690720);
 
             Console.WriteLine("Day 2");
@@ -79,7 +82,10 @@ namespace AdventOfCode.Year2019
             Console.WriteLine($"Number of Valid Passwords No Large Groups of Numbers: {numberOfValidPasswordsNoLargeGroupsOfNumbers}");
             Console.WriteLine("-----------------------------");
 
+            shipComputer = serviceProvider.GetService<IShipComputer>();
             shipComputer.ComputeIntCode(day5FileResult.ToArray(),out var result, 1);
+
+            shipComputer = serviceProvider.GetService<IShipComputer>();
             shipComputer.ComputeIntCode(day5FileResult.ToArray(), out var thermalRadiatorsDiagnosticCode, 5);
 
             Console.WriteLine("Day 5");
@@ -109,6 +115,14 @@ namespace AdventOfCode.Year2019
             Console.WriteLine("Day 8");
             Console.WriteLine($"Image Corruption Check: {imageCheck}");
             spaceImageFormat.BuildImage(image);
+            Console.WriteLine("-----------------------------");
+
+            shipComputer = serviceProvider.GetService<IShipComputer>();
+            shipComputer.ComputeIntCode(day9FileResult.ToArray(), out var boostKeyCode, 1);
+
+            Console.WriteLine("Day 9");
+            Console.WriteLine($"BOOST KeyCode: {boostKeyCode}");
+
             Console.ReadLine();
         }
     }

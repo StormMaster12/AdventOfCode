@@ -18,18 +18,18 @@ namespace AdventOfCode.Year2019.Implementations
             _serviceCollection = serviceCollection;
         }
 
-        public int Amplify(int[] data, int input, int[] phaseSetting)
+        public double Amplify(double[] data, double input, double[] phaseSetting)
         {
-            int[] dataCopy = new int[data.Length];
+            double[] dataCopy = new double[data.Length];
             data.ToList().CopyTo(dataCopy);
             //var maxAmplification = 0;
-            var output = 0;
+            double output = 0;
 
             for (var i = 0; i < phaseSetting.Length; i++)
             {
                 if (i > 0) input = output;
 
-                var inputQueue = new Queue<int>(new[] { phaseSetting[i], input });
+                var inputQueue = new Queue<double>(new[] { phaseSetting[i], input });
                 _shipComputer.Reset();
                 _shipComputer.ComputeIntCode(dataCopy, out output, inputQueue, out bool halted);
             }
@@ -37,9 +37,9 @@ namespace AdventOfCode.Year2019.Implementations
             return output;
         }
 
-        public int AmplifyFeedback(int[] data, int input, int[] phaseSetting)
+        public double AmplifyFeedback(double[] data, double input, double[] phaseSetting)
         {
-            var output = 0;
+            double output = 0;
             var halted = false;
             var amplifiers = new List<IShipComputer>();
 
@@ -48,9 +48,9 @@ namespace AdventOfCode.Year2019.Implementations
                 int i;
                 for (i = 0; i < phaseSetting.Length; i++)
                 {
-                    int[] dataCopy = new int[data.Length];
+                    double[] dataCopy = new double[data.Length];
                     data.ToList().CopyTo(dataCopy);
-                    var inputQueue = new Queue<int>();
+                    var inputQueue = new Queue<double>();
                     if (amplifiers.ElementAtOrDefault(i) == null)
                     {
                         amplifiers.Add(_serviceCollection.GetService<IShipComputer>());
@@ -70,11 +70,11 @@ namespace AdventOfCode.Year2019.Implementations
             return input;
         }
 
-        public int CalculateHighestAmplification(int[] data, bool feedback)
+        public double CalculateHighestAmplification(double[] data, bool feedback)
         {
-            int[] dataCopy = new int[data.Length];
+            double[] dataCopy = new double[data.Length];
             data.ToList().CopyTo(dataCopy);
-            var maxValue = 0;
+            double maxValue = 0;
 
             var sequences = SequenceGenerator(feedback);
 
@@ -87,21 +87,21 @@ namespace AdventOfCode.Year2019.Implementations
             return maxValue;
         }
 
-        private List<int[]> SequenceGenerator(bool feedBackLoop)
+        private List<double[]> SequenceGenerator(bool feedBackLoop)
         {
-            var list = new List<int[]>();
+            var list = new List<double[]>();
             var feedbackOffset = feedBackLoop ? 5 : 0;
 
 
-            for (int a = feedbackOffset; a <= 4 + feedbackOffset; a++)
+            for (double a = feedbackOffset; a <= 4 + feedbackOffset; a++)
             {
-                for (var b = feedbackOffset; b <= 4 + feedbackOffset; b++)
+                for (double b = feedbackOffset; b <= 4 + feedbackOffset; b++)
                 {
-                    for (var c = feedbackOffset; c <= 4 + feedbackOffset; c++)
+                    for (double c = feedbackOffset; c <= 4 + feedbackOffset; c++)
                     {
-                        for (var d = feedbackOffset; d <= 4 + feedbackOffset; d++)
+                        for (double d = feedbackOffset; d <= 4 + feedbackOffset; d++)
                         {
-                            for (var e = feedbackOffset; e <= 4 + feedbackOffset; e++)
+                            for (double e = feedbackOffset; e <= 4 + feedbackOffset; e++)
                             {
                                 if (a == b || a == c || a == d || a == e || b == c || b == d || b == e || c == d || c == e || d == e)
                                     continue;

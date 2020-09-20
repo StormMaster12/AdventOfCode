@@ -1,12 +1,13 @@
-﻿using AdventOfCode.Year2019.Interfaces.ShipComputer.ShipComputerModes;
+﻿using System.Linq;
+using AdventOfCode.Year2019.Interfaces.ShipComputer.ShipComputerModes;
 
 namespace AdventOfCode.Year2019.Implementations.ShipComputer.ShipComputerModes
 {
     class ShipComputerMode_Position : IShipComputerMode
     {
-        public int GetValue(int[] array, int parameterValue)
+        public double GetValue(double[] program, double position, double offset, double relativeBase)
         {
-            return array[parameterValue];
+            return program.ElementAtOrDefault((int)program[(int)position + (int)offset]);
         }
     }
 }

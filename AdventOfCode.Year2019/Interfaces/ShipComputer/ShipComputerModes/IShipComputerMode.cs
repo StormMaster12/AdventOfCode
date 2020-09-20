@@ -2,6 +2,6 @@
 {
     interface IShipComputerMode
     {
-        int GetValue(int[] array, int parameterValue);
+        double GetValue(double[] program, double position, double offset, double relativeBase);
     }
 }

@@ -5,8 +5,8 @@ namespace AdventOfCode.Year2019.Interfaces.ShipComputer
     public interface IShipComputer
     {
         void Reset();
-        int[] ComputeIntCode(int[] data, out int output, int input = 0);
-        int[] ComputeIntCodeSpecificValue(int[] input, in int valueToGet);
-        int[] ComputeIntCode(int[] data, out int output, Queue<int> inputs, out bool halted);
+        double[] ComputeIntCode(double[] data, out double output, double input = 0);
+        double[] ComputeIntCodeSpecificValue(double[] input, in double valueToGet);
+        double[] ComputeIntCode(double[] data, out double output, Queue<double> inputs, out bool halted);
     }
 }

@@ -6,11 +6,11 @@
         {
             if (Value1 == Value2)
             {
-                Data[Value3] = 1;
+                Data[(int)Value3] = 1;
             }
             else
             {
-                Data[Value3] = 0;
+                Data[(int)Value3] = 0;
             }
 
             if (Position != Value3)

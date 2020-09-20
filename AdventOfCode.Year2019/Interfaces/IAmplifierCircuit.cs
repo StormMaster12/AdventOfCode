@@ -2,6 +2,6 @@
 {
     public interface IAmplifierCircuit
     {
-        int CalculateHighestAmplification(int[] data, bool feedback);
+        double CalculateHighestAmplification(double[] data, bool feedback);
     }
 }
